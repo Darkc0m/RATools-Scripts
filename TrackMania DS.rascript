@@ -52,8 +52,11 @@ function rawData2Time(rawData) => rawData * 0.024414
 //  Converts from a value of 0x1 = 1 centisec to ingame time representation
 function time2RawData(time) => time * 40.96
 
-//  Gets current ingame timer with a value of 0x1 = 1 centisec
-function getTimer() => rawData2Time(dword(tbyte(0x12E560) + 0x000150))
+//  Gets current ingame timer 
+function getTimer() => dword(tbyte(0x12E560) + 0x150)
+
+//  Gets number of retries in current track
+function getRetries() => dword(tbyte(0x12E538) + 0x24B0)
 
 //  Returns true the frame a race starts
 function raceStart() => prev(byte(tbyte(0x12E560) + 0x154)) == 1 && byte(tbyte(0x12E560) + 0x154) == 0
@@ -73,6 +76,9 @@ function isInTrack(track, enviroment, difficulty) => dword(0x227BC4) == track &&
 //  Returns true if player is on menu
 function inMenu() => tbyte(0x12E560) == 0
 
+//  Returns current savefile index
+function getFileIndex() => byte(0x221914)
+
 //  Returns true if on race gamemode
 function isOnRaceMode() => dword(0x1A4CB4) == 0 || dword(0x1A4CB4) == 3
 
@@ -83,7 +89,10 @@ function isOnPlatformMode() => dword(0x1A4CB4) == 1
 function isOnPuzzleMode() => dword(0x1A4CB4) == 2
 
 //  Gets race index with provided params
-function raceTrackIndex(track, enviroment, difficulty) => track + enviroment * 5 + difficulty * 15
+function raceIndex(track, enviroment, difficulty) => track + enviroment * 5 + difficulty * 15
+
+//  Gets puzzle index with provided params
+function puzzleIndex(track, difficulty) => track + difficulty * 3
 
 //Dictionaries
 Enviroments = {
@@ -99,6 +108,119 @@ Difficulty = {
     3: "D",
     4: "E",
     5: "F"
+}
+
+//Medal addresses
+Medals = {
+    "Race": {
+        "Gold": [0x220F5C, 0x225EA4, 0x226AFC],
+        "Silver": [0x220F60, 0x225EA8, 0x226B00],
+        "Bronze": [0x220F64, 0x225EAC, 0x226B04],
+        "Author": [0x220F68, 0x225EB0, 0x226B08]
+    },
+    "Puzzle": {
+        "Gold": [0x220F6C, 0x225EB4, 0x226B0C],
+        "Silver": [0x220F70, 0x225EB8, 0x226B10],
+        "Bronze": [0x220F74, 0x225EBC, 0x226B14]
+    },
+    "Platform": {
+        "Gold": [0x220F7C, 0x225EC4, 0x226B1C],
+        "Silver": [0x220F80, 0x225EC8, 0x226B20],
+        "Bronze": [0x220F84, 0x225ECC, 0x226B24]
+    }
+}
+
+RaceGoldTime = {
+    0: 1753,
+    1: 2281,
+    2: 2017,
+    3: 2123,
+    4: 2637,
+    5: 1889,
+    6: 2184,
+    7: 2186,
+    8: 2271,
+    9: 2033,
+    10: 1696,
+    11: 1638,
+    12: 2211,
+    13: 1844,
+    14: 1939,
+    15: 6218,
+    16: 2327,
+    17: 3899,
+    18: 1812,
+    19: 3413,
+    20: 2460,
+    21: 2792,
+    22: 2988,
+    23: 2657,
+    24: 5319,
+    25: 2709,
+    26: 1990,
+    27: 7312,
+    28: 2194,
+    29: 3976,
+    30: 10963,
+    31: 5028,
+    32: 8428,
+    33: 9074,
+    34: 4550,
+    35: 3745,
+    36: 4341,
+    37: 3282,
+    38: 3946,
+    39: 6811,
+    40: 2491,
+    41: 3507,
+    42: 6313,
+    43: 6700,
+    44: 5229,
+    45: 6443,
+    46: 6018,
+    47: 3527,
+    48: 4610,
+    49: 5920,
+    50: 2637,
+    51: 5586,
+    52: 2787,
+    53: 2973,
+    54: 2561,
+    55: 11475,
+    56: 4500,
+    57: 2973,
+    58: 10636,
+    59: 3858,
+    60: 6009,
+    61: 6557,
+    62: 6871,
+    63: 6379,
+    64: 9222,
+    65: 2090,
+    66: 4108,
+    67: 2642,
+    68: 3159,
+    69: 9775,
+    70: 7054,
+    71: 8280,
+    72: 3547,
+    73: 12575,
+    74: 14820,
+    75: 2971,
+    76: 2357,
+    77: 3243,
+    78: 2860,
+    79: 4098,
+    80: 5991,
+    81: 5989,
+    82: 2209,
+    83: 5677,
+    84: 3584,
+    85: 8061,
+    86: 2732,
+    87: 2910,
+    88: 4517,
+    89: 3737
 }
 
 RaceAuthorTime = {
@@ -194,6 +316,99 @@ RaceAuthorTime = {
     89: 3473
 }
 
+RaceGoldTimeText = {
+    0: "0:17:53",
+    1: "0:22:81",
+    2: "0:20:17",
+    3: "0:21:23",
+    4: "0:26:37",
+    5: "0:18:89",
+    6: "0:21:84",
+    7: "0:21:86",
+    8: "0:22:71",
+    9: "0:20:33",
+    10: "0:16:96",
+    11: "0:16:38",
+    12: "0:22:11",
+    13: "0:18:44",
+    14: "0:19:39",
+    15: "1:02:18",
+    16: "0:23:27",
+    17: "0:38:99",
+    18: "0:18:12",
+    19: "0:34:13",
+    20: "0:24:60",
+    21: "0:27:92",
+    22: "0:29:88",
+    23: "0:26:57",
+    24: "0:53:19",
+    25: "0:27:09",
+    26: "0:19:90",
+    27: "1:13:12",
+    28: "0:21:94",
+    29: "0:39:76",
+    30: "1:49:63",
+    31: "0:50:28",
+    32: "1:24:28",
+    33: "1:30:74",
+    34: "0:45:50",
+    35: "0:37:45",
+    36: "0:43:41",
+    37: "0:32:82",
+    38: "0:39:46",
+    39: "1:08:11",
+    40: "0:24:91",
+    41: "0:35:07",
+    42: "1:03:13",
+    43: "1:07:00",
+    44: "0:52:29",
+    45: "1:04:43",
+    46: "1:00:18",
+    47: "0:35:27",
+    48: "0:46:10",
+    49: "0:59:20",
+    50: "0:26:37",
+    51: "0:55:86",
+    52: "0:27:87",
+    53: "0:29:73",
+    54: "0:25:61",
+    55: "1:54:75",
+    56: "0:45:00",
+    57: "0:29:73",
+    58: "1:46:36",
+    59: "0:38:58",
+    60: "1:00:09",
+    61: "1:05:57",
+    62: "1:08:71",
+    63: "1:03:79",
+    64: "1:32:22",
+    65: "0:20:90",
+    66: "0:41:08",
+    67: "0:26:42",
+    68: "0:31:59",
+    69: "1:37:75",
+    70: "1:10:54",
+    71: "1:22:80",
+    72: "0:35:47",
+    73: "2:05:75",
+    74: "2:28:20",
+    75: "0:29:71",
+    76: "0:23:57",
+    77: "0:32:43",
+    78: "0:28:60",
+    79: "0:40:98",
+    80: "0:59:91",
+    81: "0:59:89",
+    82: "0:22:09",
+    83: "0:56:77",
+    84: "0:35:84",
+    85: "1:20:61",
+    86: "0:27:32",
+    87: "0:29:10",
+    88: "0:45:17",
+    89: "0:37:37"
+}
+
 RaceAuthorTimeText = {
     0: "0:16:17",
     1: "0:19:01",
@@ -287,17 +502,161 @@ RaceAuthorTimeText = {
     89: "0:34:73"
 }
 
-//Race track achievements functions
+PuzzleGoldTimeText = {
+    0: "0:07:00",
+    1: "0:07:00",
+    2: "0:12:00",
+    3: "0:14:50",
+    4: "0:20:00",
+    5: "0:22:00",
+    6: "0:30:00",
+    7: "0:40:00",
+    8: "0:35:00",
+    9: "0:40:00",
+    10: "0:35:00",
+    11: "0:32:00",
+    12: "0:40:00",
+    13: "0:35:00",
+    14: "0:32:00"
+}
+
+PuzzleGoldTime = {
+    0: 0700,
+    1: 0700,
+    2: 1200,
+    3: 1450,
+    4: 2000,
+    5: 2200,
+    6: 3000,
+    7: 4000,
+    8: 3500,
+    9: 4000,
+    10: 3500,
+    11: 3200,
+    12: 4000,
+    13: 3500,
+    14: 3200
+}
+
+function raceTitle(track, enviroment, difficulty) => Enviroments[enviroment] + Difficulty[difficulty] + (track + 1)
+function platformTitle(track, difficulty) => "Platform" + Difficulty[difficulty] + (track + 1)
+function puzzleTitle(track, difficulty) => "Puzzle" + Difficulty[difficulty] + (track + 1)
+function raceEndTrigger(track, env, diff) => isInTrack(track, env, diff) && raceEnd() && !isRacePaused()
+
+//Progression achievement functions
+//  For protection measures (backing up another profile with everything unlocked)
+function sameSaveFile() => getFileIndex() == prev(getFileIndex())
+
+//  Track Unlock functions
+function trackUnlockFile(mode, file, bronze, silver, gold){
+    before = prev(dword(Medals[mode]["Bronze"][file])) < bronze || prev(dword(Medals[mode]["Silver"][file])) < silver || prev(dword(Medals[mode]["Gold"][file])) < gold
+    after = dword(Medals[mode]["Bronze"][file]) >= bronze && dword(Medals[mode]["Silver"][file]) >= silver && dword(Medals[mode]["Gold"][file]) >= gold
+    return before && after
+}
+
+function trackUnlockTrigger(mode, bronze, silver, gold){
+    triggered = false
+    for file in range(0,2){
+        triggered = triggered || trackUnlockFile(mode, file, bronze, silver, gold) && getFileIndex() == file
+    }
+    
+    return triggered && sameSaveFile()
+}
+
+//  Completionist functions
+function modeCompletionFile(mode, file, medal, amount){
+    return prev(dword(Medals[mode][medal][file])) == amount - 1 && measured(dword(Medals[mode][medal][file]) == amount, getFileIndex() == file, format="percent")
+}
+
+function modeCompletionTrigger(mode, medal, amount){
+    triggered = false
+    for file in range(0,2){
+        triggered = triggered || modeCompletionFile(mode, file, medal, amount)
+    }
+    
+    return triggered && sameSaveFile()
+}
+
+//Progression achievements
+//  Race mode
+achievement("Trackmania Rookie", "Unlock Easy Races", 5, trackUnlockTrigger("Race", 10, 5, 0))
+achievement("Trackmania 2", "Unlock Medium Races", 5, trackUnlockTrigger("Race", 20, 10, 5))
+achievement("Trackmania 3", "Unlock Hard Races", 5, trackUnlockTrigger("Race", 45, 35, 25))
+achievement("Trackmania 4", "Unlock Extreme Races", 5, trackUnlockTrigger("Race", 60, 50, 45))
+achievement("Trackmania 5", "Unlock Bonus Races", 5, trackUnlockTrigger("Race", 0, 0, 75))
+achievement("Trackmania Legend", "Get all Gold medals in race mode", 50, modeCompletionTrigger("Race", "Gold", 90))
+achievement("Trackmania God", "Get all Author medals in race mode", 100, modeCompletionTrigger("Race", "Author", 90))
+
+//  Platform mode
+achievement("Trackmania Plat 1", "Unlock Easy Platforms", 5, trackUnlockTrigger("Platform", 2, 0, 0))
+achievement("Trackmania Plat 2", "Unlock Medium Platforms", 5, trackUnlockTrigger("Platform", 4, 3, 1))
+achievement("Trackmania Plat 3", "Unlock Hard Platforms", 5, trackUnlockTrigger("Platform", 9, 6, 3))
+achievement("Trackmania Plat 4", "Unlock Extreme Platforms", 5, trackUnlockTrigger("Platform", 12, 10, 8))
+achievement("Trackmania Plat all", "Get all Gold medals in Platform mode", 25, modeCompletionTrigger("Platform", "Gold", 15))
+
+//  Puzzle mode
+achievement("Trackmania Puz 1", "Unlock Easy Puzzles", 5, trackUnlockTrigger("Puzzle", 3, 0, 0))
+achievement("Trackmania Puz 2", "Unlock Medium Puzzles", 5, trackUnlockTrigger("Puzzle", 6, 3, 0))
+achievement("Trackmania Puz 3", "Unlock Hard Puzzles", 5, trackUnlockTrigger("Puzzle", 9, 6, 3))
+achievement("Trackmania Puz 4", "Unlock Extreme Puzzles", 5, trackUnlockTrigger("Puzzle", 12, 9, 6))
+achievement("Trackmania Puz All", "Get all Gold medals in Puzzle mode", 25, modeCompletionTrigger("Puzzle", "Gold", 15))
 
 
-//Race track achievements
-//achievement(title, description, points, trigger)
+//Race achievement functions
+function raceTitleGold(track, env, diff) => raceTitle(track, env, diff) + " Gold"
+function raceTitleAuthor(track, env, diff) => raceTitle(track, env, diff) + " Author"
+function raceDescriptionGold(track, env, diff) => "Finish " + raceTitle(track, env, diff) + " in less than " + RaceGoldTimeText[raceIndex(track, env, diff)]
+function raceDescriptionAuthor(track, env, diff) => "Finish " + raceTitle(track, env, diff) + " in less than " + RaceAuthorTimeText[raceIndex(track, env, diff)]
+function raceTimeLowerThanGold(track, env, diff) => getTimer() < time2RawData(RaceGoldTime[raceIndex(track, env, diff)])
+function raceTimeLowerThanAuthor(track, env, diff) => getTimer() < time2RawData(RaceAuthorTime[raceIndex(track, env, diff)])
+function raceGoldMedalTrigger(track, env, diff) => isOnRaceMode() && raceEndTrigger(track, env, diff) && raceTimeLowerThanGold(track, env, diff)
+function raceAuthorMedalTrigger(track, env, diff) => isOnRaceMode() && raceEndTrigger(track, env, diff) && raceTimeLowerThanAuthor(track, env, diff)
+
+//Race achievements
+for d in range(0,5){
+    for e in range(0,2){
+        for t in range(0,4){
+            //Gold medals
+            achievement(raceTitleGold(t, e, d), raceDescriptionGold(t, e, d), 5, raceGoldMedalTrigger(t, e, d))
+            
+            //Author medal
+            achievement(raceTitleAuthor(t, e, d), raceDescriptionAuthor(t, e, d), 5, raceAuthorMedalTrigger(t, e, d))
+        }
+    }
+}
+
+
+//Platform achievement functions
+function platformTitleGold(track, diff) => platformTitle(track, diff) + " Gold"
+function platformDescriptionGold(track, diff) => "Finish " + platformTitle(track, diff) + " with 0 retries"
+function platformZeroRetries() => 0 == getRetries()
+function platformGoldMedalTrigger(track, diff) => isOnPlatformMode() && raceEndTrigger(track, track, diff) && platformZeroRetries()
+
+//Platform achievements
+for d in range(0,4){
+    for t in range(0,2){
+        achievement(platformTitleGold(t, d), platformDescriptionGold(t, d), 5, platformGoldMedalTrigger(t, d))
+    }
+}
+
+//Puzzle achievement functions
+function puzzleTitleGold(track, diff) => puzzleTitle(track, diff) + " Gold"
+function puzzleDescriptionGold(track, diff) => "Finish " + puzzleTitle(track, diff) + " in less than " + PuzzleGoldTimeText[puzzleIndex(track, diff)]
+function puzzleTimeLowerThanGold(track, diff) => getTimer() < time2RawData(PuzzleGoldTime[puzzleIndex(track, diff)])
+function puzzleGoldMedalTrigger(track, diff) => isOnPuzzleMode() && raceEndTrigger(track, track, diff) && puzzleTimeLowerThanGold(track, diff)
+
+//Puzzle achievement functions
+for d in range(0,4){
+    for t in range(0,2){
+        achievement(puzzleTitleGold(t, d), puzzleDescriptionGold(t, d), 5, puzzleGoldMedalTrigger(t, d))
+    }
+}
 
 
 //Leaderboard generic functions
 function cancelLB() => inMenu() || !isRaceStarted()
 function submitLB() => raceEnd() && !isRacePaused()
-function timerLB() => measured(getTimer())
+function timerLB() => measured(rawData2Time(getTimer()))
 
 
 //Race Leaderboard Functions
@@ -316,25 +675,23 @@ for d in range(0,5){
 
 
 //Platform Leaderboard Functions
-function platformTitleLB(track, difficulty) => "Platform" + Difficulty[difficulty] + (track + 1)
-function platformDescriptionLB(track, difficulty) => "Beat " + platformTitleLB(track, difficulty)
+function platformDescriptionLB(track, difficulty) => "Beat " + platformTitle(track, difficulty)
 function platformStartLB(track, difficulty) => isOnPlatformMode() && raceStart() && isInTrack(track, track, difficulty)
-function retriesLB() => dword(tbyte(0x12E538) + 0x24B0)
 
 //Platform Retries Leaderboard Functions
-function platformRetriesTitleLB(track, difficulty) => platformTitleLB(track, difficulty) + " Retries"
+function platformRetriesTitleLB(track, difficulty) => platformTitle(track, difficulty) + " Retries"
 function platformRetriesDescriptionLB(track, difficulty) => platformDescriptionLB(track, difficulty) + " with least amount of retries"
 
 //Platform Time Leaderboard Functions
-function platformTimeTitleLB(track, difficulty) => platformTitleLB(track, difficulty) + " Time"
+function platformTimeTitleLB(track, difficulty) => platformTitle(track, difficulty) + " Time"
 function platformTimeDescriptionLB(track, difficulty) => platformDescriptionLB(track, difficulty) + " in least time without retrying"
-function platformTimeCancelLB() => cancelLB() || retriesLB() > 0
+function platformTimeCancelLB() => cancelLB() || getRetries() > 0
 
 //Platform Leaderboards
 for d in range(0,4){
     for t in range(0,2){
         //Retries Leaderboard
-        leaderboard(platformRetriesTitleLB(t, d), platformRetriesDescriptionLB(t, d), platformStartLB(t, d), cancelLB(), submitLB(), retriesLB(), lower_is_better=true)
+        leaderboard(platformRetriesTitleLB(t, d), platformRetriesDescriptionLB(t, d), platformStartLB(t, d), cancelLB(), submitLB(), getRetries(), lower_is_better=true)
         
         //Time Leaderboard
         leaderboard(platformTimeTitleLB(t, d), platformTimeDescriptionLB(t, d), platformStartLB(t, d), platformTimeCancelLB(), submitLB(), timerLB(), format="MILLISECS", lower_is_better=true)
