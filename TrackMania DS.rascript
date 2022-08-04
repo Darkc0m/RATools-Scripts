@@ -130,6 +130,52 @@ Medals = {
     }
 }
 
+//Shop addresses
+Shop = {
+    "Skins":{
+        "Stadium":{
+            "Address": [0x223CDC, 0x225CE4, 0x22657C],
+            "Count": 10
+        },
+        "Desert":{
+            "Address": [0x223CEC, 0x225CF4, 0x22658C],
+            "Count": 10
+        },
+        "Rally":{
+            "Address": [0x223CFC, 0x225D04, 0x22659C],
+            "Count": 10
+        }
+    },
+    "Blocks":{
+        "Stadium":{
+            "Address": [0x223BE6, 0x225BEE, 0x226486],
+            "Count": 45
+        },
+        "Desert":{
+            "Address": [0x223C26, 0x225C2E, 0x2264C6],
+            "Count": 34
+        },
+        "Rally":{
+            "Address": [0x223C66, 0x225C6E, 0x226506],
+            "Count": 27
+        }
+    },
+    "Tracks":{
+        "Stadium":{
+            "Address": [0x223CA6, 0x225CAE, 0x226546],
+            "Count": 5
+        },
+        "Desert":{
+            "Address": [0x223CAB, 0x225CB3, 0x22654B],
+            "Count": 5
+        },
+        "Rally":{
+            "Address": [0x223CB0, 0x225CB8, 0x226550],
+            "Count": 5
+        }
+    }
+}
+
 RaceGoldTime = {
     0: 1753,
     1: 2281,
@@ -550,8 +596,8 @@ function sameSaveFile() => getFileIndex() == prev(getFileIndex())
 //  Track Unlock functions
 function trackUnlockFile(mode, file, bronze, silver, gold){
     before = prev(dword(Medals[mode]["Bronze"][file])) < bronze || prev(dword(Medals[mode]["Silver"][file])) < silver || prev(dword(Medals[mode]["Gold"][file])) < gold
-    after = dword(Medals[mode]["Bronze"][file]) >= bronze && dword(Medals[mode]["Silver"][file]) >= silver && dword(Medals[mode]["Gold"][file]) >= gold
-    return before && after
+    now = dword(Medals[mode]["Bronze"][file]) >= bronze && dword(Medals[mode]["Silver"][file]) >= silver && dword(Medals[mode]["Gold"][file]) >= gold
+    return before && now
 }
 
 function trackUnlockTrigger(mode, bronze, silver, gold){
@@ -577,13 +623,55 @@ function modeCompletionTrigger(mode, medal, amount){
     return triggered && sameSaveFile()
 }
 
+//  Shop functions
+function prevBoughtItems(env, file){
+    bought = env["Count"]
+    for item in range(0, env["Count"] - 1){
+       bought = bought - prev(byte(env["Address"][file] + item))
+    }
+    return bought
+}
+
+function boughtItems(env, file){
+    bought = env["Count"]
+    for item in range(0, env["Count"] - 1){
+        bought = bought - byte(env["Address"][file] + item)
+    }
+    return bought
+}
+
+function boughtFunctionFile(item, file){
+    totalCount = 0
+    beforeCount = 0
+    nowCount = 0
+    for env in Shop[item]{
+        totalCount = totalCount + Shop[item][env]["Count"]
+        beforeCount = beforeCount + prevBoughtItems(Shop[item][env], file)
+        nowCount = nowCount + boughtItems(Shop[item][env], file)
+    }
+    
+    before = beforeCount == totalCount - 1
+    now = nowCount == totalCount && getFileIndex() == file
+    
+    return before && now
+}
+
+function boughtFunction(item){
+    triggered = false
+    for file in range(0,2){
+        triggered = triggered || boughtFunctionFile(item, file)
+    }
+    
+    return triggered && sameSaveFile()
+}
+
 //Progression achievements
 //  Race mode
 achievement("Trackmania Rookie", "Unlock Easy Races", 5, trackUnlockTrigger("Race", 10, 5, 0))
-achievement("Trackmania 2", "Unlock Medium Races", 5, trackUnlockTrigger("Race", 20, 10, 5))
-achievement("Trackmania 3", "Unlock Hard Races", 5, trackUnlockTrigger("Race", 45, 35, 25))
-achievement("Trackmania 4", "Unlock Extreme Races", 5, trackUnlockTrigger("Race", 60, 50, 45))
-achievement("Trackmania 5", "Unlock Bonus Races", 5, trackUnlockTrigger("Race", 0, 0, 75))
+achievement("Trackmania Amateur", "Unlock Medium Races", 5, trackUnlockTrigger("Race", 20, 10, 5))
+achievement("Trackmania Veteran", "Unlock Hard Races", 5, trackUnlockTrigger("Race", 45, 35, 25))
+achievement("Trackmania Expert", "Unlock Extreme Races", 5, trackUnlockTrigger("Race", 60, 50, 45))
+achievement("Trackmania Master", "Unlock Bonus Races", 5, trackUnlockTrigger("Race", 0, 0, 75))
 achievement("Trackmania Legend", "Get all Gold medals in race mode", 50, modeCompletionTrigger("Race", "Gold", 90))
 achievement("Trackmania God", "Get all Author medals in race mode", 100, modeCompletionTrigger("Race", "Author", 90))
 
@@ -600,6 +688,11 @@ achievement("Trackmania Puz 2", "Unlock Medium Puzzles", 5, trackUnlockTrigger("
 achievement("Trackmania Puz 3", "Unlock Hard Puzzles", 5, trackUnlockTrigger("Puzzle", 9, 6, 3))
 achievement("Trackmania Puz 4", "Unlock Extreme Puzzles", 5, trackUnlockTrigger("Puzzle", 12, 9, 6))
 achievement("Trackmania Puz All", "Get all Gold medals in Puzzle mode", 25, modeCompletionTrigger("Puzzle", "Gold", 15))
+
+//  Shop
+achievement("Skins", "Buy all skins in the shop", 5, boughtFunction("Skins"))
+achievement("Blocks", "Buy all blocks in the shop", 5, boughtFunction("Blocks"))
+achievement("Tracks", "Buy all tracks in the shop", 5, boughtFunction("Tracks"))
 
 
 //Race achievement functions
