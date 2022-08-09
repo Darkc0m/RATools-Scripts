@@ -44,6 +44,717 @@
 //          - 0x05: Bonus
 // $227BC4: [32-bit] Track (Ranges from 0x00 to 0x04)
 
+//Constants
+Environments = {
+    0: "Stadium",
+    1: "Desert",
+    2: "Rally"
+}
+
+Difficulty = {
+    0: "A",
+    1: "B",
+    2: "C",
+    3: "D",
+    4: "E",
+    5: "F"
+}
+
+//Medal addresses
+Medals = {
+    "Race": {
+        "Gold": [0x229F5C, 0x225EA4, 0x226AFC],
+        "Silver": [0x229F60, 0x225EA8, 0x226B00],
+        "Bronze": [0x229F64, 0x225EAC, 0x226B04],
+        "Author": [0x229F68, 0x225EB0, 0x226B08]
+    },
+    "Puzzle": {
+        "Gold": [0x229F6C, 0x225EB4, 0x226B0C],
+        "Silver": [0x229F70, 0x225EB8, 0x226B10],
+        "Bronze": [0x229F74, 0x225EBC, 0x226B14]
+    },
+    "Platform": {
+        "Gold": [0x229F7C, 0x225EC4, 0x226B1C],
+        "Silver": [0x229F80, 0x225EC8, 0x226B20],
+        "Bronze": [0x229F84, 0x225ECC, 0x226B24]
+    }
+}
+
+//Shop addresses
+Shop = {
+    "Skins":{
+        "Stadium":{
+            "Address": [0x223CDC, 0x225CE4, 0x22657C],
+            "Count": 10
+        },
+        "Desert":{
+            "Address": [0x223CEC, 0x225CF4, 0x22658C],
+            "Count": 10
+        },
+        "Rally":{
+            "Address": [0x223CFC, 0x225D04, 0x22659C],
+            "Count": 10
+        }
+    },
+    "Blocks":{
+        "Stadium":{
+            "Address": [0x223BE6, 0x225BEE, 0x226486],
+            "Count": 45
+        },
+        "Desert":{
+            "Address": [0x223C26, 0x225C2E, 0x2264C6],
+            "Count": 34
+        },
+        "Rally":{
+            "Address": [0x223C66, 0x225C6E, 0x226506],
+            "Count": 27
+        }
+    },
+    "Tracks":{
+        "Stadium":{
+            "Address": [0x223CA6, 0x225CAE, 0x226546],
+            "Count": 5
+        },
+        "Desert":{
+            "Address": [0x223CAB, 0x225CB3, 0x22654B],
+            "Count": 5
+        },
+        "Rally":{
+            "Address": [0x223CB0, 0x225CB8, 0x226550],
+            "Count": 5
+        }
+    }
+}
+
+Race = {
+    "GoldTimeString": {
+        0: "0:17:53",
+        1: "0:22:81",
+        2: "0:20:17",
+        3: "0:21:23",
+        4: "0:26:37",
+        5: "0:18:89",
+        6: "0:21:84",
+        7: "0:21:86",
+        8: "0:22:71",
+        9: "0:20:33",
+        10: "0:16:96",
+        11: "0:16:38",
+        12: "0:22:11",
+        13: "0:18:44",
+        14: "0:19:39",
+        15: "1:02:18",
+        16: "0:23:27",
+        17: "0:38:99",
+        18: "0:18:12",
+        19: "0:34:13",
+        20: "0:24:60",
+        21: "0:27:92",
+        22: "0:29:88",
+        23: "0:26:57",
+        24: "0:53:19",
+        25: "0:27:09",
+        26: "0:19:90",
+        27: "1:13:12",
+        28: "0:21:94",
+        29: "0:39:76",
+        30: "1:49:63",
+        31: "0:50:28",
+        32: "1:24:28",
+        33: "1:30:74",
+        34: "0:45:50",
+        35: "0:37:45",
+        36: "0:43:41",
+        37: "0:32:82",
+        38: "0:39:46",
+        39: "1:08:11",
+        40: "0:24:91",
+        41: "0:35:07",
+        42: "1:03:13",
+        43: "1:07:00",
+        44: "0:52:29",
+        45: "1:04:43",
+        46: "1:00:18",
+        47: "0:35:27",
+        48: "0:46:10",
+        49: "0:59:20",
+        50: "0:26:37",
+        51: "0:55:86",
+        52: "0:27:87",
+        53: "0:29:73",
+        54: "0:25:61",
+        55: "1:54:75",
+        56: "0:45:00",
+        57: "0:29:73",
+        58: "1:46:36",
+        59: "0:38:58",
+        60: "1:00:09",
+        61: "1:05:57",
+        62: "1:08:71",
+        63: "1:03:79",
+        64: "1:32:22",
+        65: "0:20:90",
+        66: "0:41:08",
+        67: "0:26:42",
+        68: "0:31:59",
+        69: "1:37:75",
+        70: "1:10:54",
+        71: "1:22:80",
+        72: "0:35:47",
+        73: "2:05:75",
+        74: "2:28:20",
+        75: "0:29:71",
+        76: "0:23:57",
+        77: "0:32:43",
+        78: "0:28:60",
+        79: "0:40:98",
+        80: "0:59:91",
+        81: "0:59:89",
+        82: "0:22:09",
+        83: "0:56:77",
+        84: "0:35:84",
+        85: "1:20:61",
+        86: "0:27:32",
+        87: "0:29:10",
+        88: "0:45:17",
+        89: "0:37:37"
+    },
+    "GoldTime": {
+        0: 1753,
+        1: 2281,
+        2: 2017,
+        3: 2123,
+        4: 2637,
+        5: 1889,
+        6: 2184,
+        7: 2186,
+        8: 2271,
+        9: 2033,
+        10: 1696,
+        11: 1638,
+        12: 2211,
+        13: 1844,
+        14: 1939,
+        15: 6218,
+        16: 2327,
+        17: 3899,
+        18: 1812,
+        19: 3413,
+        20: 2460,
+        21: 2792,
+        22: 2988,
+        23: 2657,
+        24: 5319,
+        25: 2709,
+        26: 1990,
+        27: 7312,
+        28: 2194,
+        29: 3976,
+        30: 10963,
+        31: 5028,
+        32: 8428,
+        33: 9074,
+        34: 4550,
+        35: 3745,
+        36: 4341,
+        37: 3282,
+        38: 3946,
+        39: 6811,
+        40: 2491,
+        41: 3507,
+        42: 6313,
+        43: 6700,
+        44: 5229,
+        45: 6443,
+        46: 6018,
+        47: 3527,
+        48: 4610,
+        49: 5920,
+        50: 2637,
+        51: 5586,
+        52: 2787,
+        53: 2973,
+        54: 2561,
+        55: 11475,
+        56: 4500,
+        57: 2973,
+        58: 10636,
+        59: 3858,
+        60: 6009,
+        61: 6557,
+        62: 6871,
+        63: 6379,
+        64: 9222,
+        65: 2090,
+        66: 4108,
+        67: 2642,
+        68: 3159,
+        69: 9775,
+        70: 7054,
+        71: 8280,
+        72: 3547,
+        73: 12575,
+        74: 14820,
+        75: 2971,
+        76: 2357,
+        77: 3243,
+        78: 2860,
+        79: 4098,
+        80: 5991,
+        81: 5989,
+        82: 2209,
+        83: 5677,
+        84: 3584,
+        85: 8061,
+        86: 2732,
+        87: 2910,
+        88: 4517,
+        89: 3737
+    },
+    "GoldPoints": {
+        0: 5,
+        1: 5,
+        2: 5,
+        3: 3,
+        4: 5,
+        5: 5,
+        6: 5,
+        7: 5,
+        8: 3,
+        9: 5,
+        10: 5,
+        11: 5,
+        12: 5,
+        13: 3,
+        14: 5,
+        15: 5,
+        16: 5,
+        17: 5,
+        18: 5,
+        19: 5,
+        20: 5,
+        21: 5,
+        22: 2,
+        23: 5,
+        24: 5,
+        25: 2,
+        26: 2,
+        27: 5,
+        28: 5,
+        29: 5,
+        30: 5,
+        31: 2,
+        32: 5,
+        33: 5,
+        34: 3,
+        35: 3,
+        36: 5,
+        37: 5,
+        38: 3,
+        39: 5,
+        40: 5,
+        41: 3,
+        42: 5,
+        43: 5,
+        44: 5,
+        45: 10,
+        46: 10,
+        47: 3,
+        48: 5,
+        49: 10,
+        50: 5,
+        51: 2,
+        52: 5,
+        53: 5,
+        54: 5,
+        55: 5,
+        56: 5,
+        57: 5,
+        58: 5,
+        59: 5,
+        60: 10,
+        61: 10,
+        62: 5,
+        63: 5,
+        64: 5,
+        65: 5,
+        66: 5,
+        67: 5,
+        68: 5,
+        69: 5,
+        70: 5,
+        71: 5,
+        72: 5,
+        73: 5,
+        74: 5,
+        75: 10,
+        76: 5,
+        77: 5,
+        78: 5,
+        79: 5,
+        80: 3,
+        81: 5,
+        82: 5,
+        83: 5,
+        84: 5,
+        85: 5,
+        86: 5,
+        87: 5,
+        88: 5,
+        89: 5
+    },
+    "AuthorTimeString": {
+        0: "0:16:17",
+        1: "0:19:01",
+        2: "0:18:76",
+        3: "0:21:20",
+        4: "0:25:11",
+        5: "0:17:72",
+        6: "0:20:70",
+        7: "0:20:12",
+        8: "0:22:68",
+        9: "0:19:76",
+        10: "0:15:39",
+        11: "0:14:66",
+        12: "0:19:97",
+        13: "0:18:41",
+        14: "0:17:58",
+        15: "0:52:84",
+        16: "0:21:00",
+        17: "0:35:94",
+        18: "0:16:67",
+        19: "0:30:86",
+        20: "0:23:87",
+        21: "0:27:39",
+        22: "0:29:17",
+        23: "0:25:42",
+        24: "0:46:55",
+        25: "0:19:09",
+        26: "0:16:22",
+        27: "1:04:66",
+        28: "0:19:14",
+        29: "0:36:75",
+        30: "1:36:79",
+        31: "0:43:22",
+        32: "1:14:59",
+        33: "1:22:21",
+        34: "0:42:57",
+        35: "0:34:15",
+        36: "0:41:75",
+        37: "0:29:85",
+        38: "0:38:15",
+        39: "1:00:81",
+        40: "0:22:30",
+        41: "0:29:62",
+        42: "0:54:59",
+        43: "1:01:31",
+        44: "0:46:27",
+        45: "1:01:58",
+        46: "0:54:95",
+        47: "0:33:34",
+        48: "0:43:30",
+        49: "0:58:72",
+        50: "0:24:90",
+        51: "0:52:28",
+        52: "0:25:85",
+        53: "0:26:51",
+        54: "0:22:70",
+        55: "1:45:80",
+        56: "0:39:88",
+        57: "0:26:33",
+        58: "1:35:16",
+        59: "0:34:86",
+        60: "0:57:43",
+        61: "1:02:86",
+        62: "1:04:93",
+        63: "1:01:01",
+        64: "1:30:85",
+        65: "0:20:25",
+        66: "0:36:28",
+        67: "0:24:69",
+        68: "0:29:72",
+        69: "1:29:00",
+        70: "1:03:39",
+        71: "1:13:78",
+        72: "0:32:77",
+        73: "1:56:35",
+        74: "2:23:69",
+        75: "0:29:64",
+        76: "0:21:27",
+        77: "0:29:85",
+        78: "0:25:73",
+        79: "0:39:53",
+        80: "0:55:90",
+        81: "0:55:15",
+        82: "0:19:82",
+        83: "0:54:34",
+        84: "0:34:98",
+        85: "1:06:32",
+        86: "0:24:47",
+        87: "0:26:38",
+        88: "0:42:30",
+        89: "0:34:73"
+    },
+    "AuthorTime": {
+        0: 1617,
+        1: 1901,
+        2: 1876,
+        3: 2120,
+        4: 2511,
+        5: 1772,
+        6: 2070,
+        7: 2012,
+        8: 2268,
+        9: 1976,
+        10: 1539,
+        11: 1466,
+        12: 1997,
+        13: 1841,
+        14: 1758,
+        15: 5284,
+        16: 2100,
+        17: 3594,
+        18: 1667,
+        19: 3086,
+        20: 2387,
+        21: 2739,
+        22: 2917,
+        23: 2542,
+        24: 4655,
+        25: 1909,
+        26: 1622,
+        27: 6466,
+        28: 1914,
+        29: 3675,
+        30: 9679,
+        31: 4322,
+        32: 7459,
+        33: 8221,
+        34: 4257,
+        35: 3415,
+        36: 4175,
+        37: 2985,
+        38: 3815,
+        39: 6081,
+        40: 2230,
+        41: 2962,
+        42: 5459,
+        43: 6131,
+        44: 4627,
+        45: 6158,
+        46: 5495,
+        47: 3334,
+        48: 4330,
+        49: 5872,
+        50: 2490,
+        51: 5228,
+        52: 2585,
+        53: 2651,
+        54: 2270,
+        55: 10580,
+        56: 3988,
+        57: 2633,
+        58: 9516,
+        59: 3486,
+        60: 5743,
+        61: 6286,
+        62: 6493,
+        63: 6101,
+        64: 9085,
+        65: 2025,
+        66: 3628,
+        67: 2469,
+        68: 2972,
+        69: 8900,
+        70: 6339,
+        71: 7378,
+        72: 3277,
+        73: 11635,
+        74: 14369,
+        75: 2964,
+        76: 2127,
+        77: 2985,
+        78: 2573,
+        79: 3953,
+        80: 5590,
+        81: 5515,
+        82: 1982,
+        83: 5434,
+        84: 3498,
+        85: 6632,
+        86: 2447,
+        87: 2638,
+        88: 4230,
+        89: 3473
+    },
+    "AuthorPoints": {
+        0: 5,
+        1: 5,
+        2: 5,
+        3: 4,
+        4: 10,
+        5: 10,
+        6: 25,
+        7: 5,
+        8: 4,
+        9: 25,
+        10: 10,
+        11: 10,
+        12: 5,
+        13: 3,
+        14: 5,
+        15: 10,
+        16: 5,
+        17: 10,
+        18: 5,
+        19: 10,
+        20: 10,
+        21: 5,
+        22: 3,
+        23: 5,
+        24: 10,
+        25: 10,
+        26: 3,
+        27: 10,
+        28: 10,
+        29: 10,
+        30: 10,
+        31: 4,
+        32: 10,
+        33: 10,
+        34: 3,
+        35: 4,
+        36: 10,
+        37: 10,
+        38: 3,
+        39: 10,
+        40: 10,
+        41: 5,
+        42: 10,
+        43: 10,
+        44: 25,
+        45: 10,
+        46: 10,
+        47: 5,
+        48: 10,
+        49: 10,
+        50: 10,
+        51: 3,
+        52: 5,
+        53: 10,
+        54: 25,
+        55: 10,
+        56: 5,
+        57: 10,
+        58: 10,
+        59: 10,
+        60: 25,
+        61: 10,
+        62: 25,
+        63: 10,
+        64: 10,
+        65: 5,
+        66: 10,
+        67: 5,
+        68: 10,
+        69: 10,
+        70: 10,
+        71: 10,
+        72: 10,
+        73: 10,
+        74: 10,
+        75: 10,
+        76: 10,
+        77: 10,
+        78: 25,
+        79: 5,
+        80: 5,
+        81: 5,
+        82: 10,
+        83: 10,
+        84: 10,
+        85: 10,
+        86: 10,
+        87: 10,
+        88: 10,
+        89: 10
+    }
+}
+
+Platform = {
+    "GoldPoints": {
+        0: 5,
+        1: 5,
+        2: 5,
+        3: 10,
+        4: 10,
+        5: 10,
+        6: 10,
+        7: 10,
+        8: 10,
+        9: 10,
+        10: 10,
+        11: 10,
+        12: 10,
+        13: 10,
+        14: 10
+    }
+}
+
+Puzzle = {
+    "GoldTimeString": {
+        0: "0:07:00",
+        1: "0:07:00",
+        2: "0:12:00",
+        3: "0:14:50",
+        4: "0:20:00",
+        5: "0:22:00",
+        6: "0:30:00",
+        7: "0:40:00",
+        8: "0:35:00",
+        9: "0:40:00",
+        10: "0:35:00",
+        11: "0:32:00",
+        12: "0:40:00",
+        13: "0:35:00",
+        14: "0:32:00"
+    },
+    "GoldTime": {
+        0: 0700,
+        1: 0700,
+        2: 1200,
+        3: 1450,
+        4: 2000,
+        5: 2200,
+        6: 3000,
+        7: 4000,
+        8: 3500,
+        9: 4000,
+        10: 3500,
+        11: 3200,
+        12: 4000,
+        13: 3500,
+        14: 3200
+    },
+    "GoldPoints": {
+        0: 2,
+        1: 3,
+        2: 3,
+        3: 3,
+        4: 5,
+        5: 5,
+        6: 5,
+        7: 5,
+        8: 5,
+        9: 4,
+        10: 5,
+        11: 5,
+        12: 10,
+        13: 10,
+        14: 10
+    }
+}
+
 
 //Helper functions
 //  Converts from ingame time representation to a value of 0x1 = 1 centisec
@@ -94,500 +805,18 @@ function raceIndex(track, enviroment, difficulty) => track + enviroment * 5 + di
 //  Gets puzzle index with provided params
 function puzzleIndex(track, difficulty) => track + difficulty * 3
 
-//Dictionaries
-Enviroments = {
-    0: "Stadium",
-    1: "Desert",
-    2: "Rally"
-}
+//  Gets race name from provided params
+function raceTitle(track, enviroment, difficulty) => Environments[enviroment] + Difficulty[difficulty] + (track + 1)
 
-Difficulty = {
-    0: "A",
-    1: "B",
-    2: "C",
-    3: "D",
-    4: "E",
-    5: "F"
-}
-
-//Medal addresses
-Medals = {
-    "Race": {
-        "Gold": [0x220F5C, 0x225EA4, 0x226AFC],
-        "Silver": [0x220F60, 0x225EA8, 0x226B00],
-        "Bronze": [0x220F64, 0x225EAC, 0x226B04],
-        "Author": [0x220F68, 0x225EB0, 0x226B08]
-    },
-    "Puzzle": {
-        "Gold": [0x220F6C, 0x225EB4, 0x226B0C],
-        "Silver": [0x220F70, 0x225EB8, 0x226B10],
-        "Bronze": [0x220F74, 0x225EBC, 0x226B14]
-    },
-    "Platform": {
-        "Gold": [0x220F7C, 0x225EC4, 0x226B1C],
-        "Silver": [0x220F80, 0x225EC8, 0x226B20],
-        "Bronze": [0x220F84, 0x225ECC, 0x226B24]
-    }
-}
-
-//Shop addresses
-Shop = {
-    "Skins":{
-        "Stadium":{
-            "Address": [0x223CDC, 0x225CE4, 0x22657C],
-            "Count": 10
-        },
-        "Desert":{
-            "Address": [0x223CEC, 0x225CF4, 0x22658C],
-            "Count": 10
-        },
-        "Rally":{
-            "Address": [0x223CFC, 0x225D04, 0x22659C],
-            "Count": 10
-        }
-    },
-    "Blocks":{
-        "Stadium":{
-            "Address": [0x223BE6, 0x225BEE, 0x226486],
-            "Count": 45
-        },
-        "Desert":{
-            "Address": [0x223C26, 0x225C2E, 0x2264C6],
-            "Count": 34
-        },
-        "Rally":{
-            "Address": [0x223C66, 0x225C6E, 0x226506],
-            "Count": 27
-        }
-    },
-    "Tracks":{
-        "Stadium":{
-            "Address": [0x223CA6, 0x225CAE, 0x226546],
-            "Count": 5
-        },
-        "Desert":{
-            "Address": [0x223CAB, 0x225CB3, 0x22654B],
-            "Count": 5
-        },
-        "Rally":{
-            "Address": [0x223CB0, 0x225CB8, 0x226550],
-            "Count": 5
-        }
-    }
-}
-
-RaceGoldTime = {
-    0: 1753,
-    1: 2281,
-    2: 2017,
-    3: 2123,
-    4: 2637,
-    5: 1889,
-    6: 2184,
-    7: 2186,
-    8: 2271,
-    9: 2033,
-    10: 1696,
-    11: 1638,
-    12: 2211,
-    13: 1844,
-    14: 1939,
-    15: 6218,
-    16: 2327,
-    17: 3899,
-    18: 1812,
-    19: 3413,
-    20: 2460,
-    21: 2792,
-    22: 2988,
-    23: 2657,
-    24: 5319,
-    25: 2709,
-    26: 1990,
-    27: 7312,
-    28: 2194,
-    29: 3976,
-    30: 10963,
-    31: 5028,
-    32: 8428,
-    33: 9074,
-    34: 4550,
-    35: 3745,
-    36: 4341,
-    37: 3282,
-    38: 3946,
-    39: 6811,
-    40: 2491,
-    41: 3507,
-    42: 6313,
-    43: 6700,
-    44: 5229,
-    45: 6443,
-    46: 6018,
-    47: 3527,
-    48: 4610,
-    49: 5920,
-    50: 2637,
-    51: 5586,
-    52: 2787,
-    53: 2973,
-    54: 2561,
-    55: 11475,
-    56: 4500,
-    57: 2973,
-    58: 10636,
-    59: 3858,
-    60: 6009,
-    61: 6557,
-    62: 6871,
-    63: 6379,
-    64: 9222,
-    65: 2090,
-    66: 4108,
-    67: 2642,
-    68: 3159,
-    69: 9775,
-    70: 7054,
-    71: 8280,
-    72: 3547,
-    73: 12575,
-    74: 14820,
-    75: 2971,
-    76: 2357,
-    77: 3243,
-    78: 2860,
-    79: 4098,
-    80: 5991,
-    81: 5989,
-    82: 2209,
-    83: 5677,
-    84: 3584,
-    85: 8061,
-    86: 2732,
-    87: 2910,
-    88: 4517,
-    89: 3737
-}
-
-RaceAuthorTime = {
-    0: 1617,
-    1: 1901,
-    2: 1876,
-    3: 2120,
-    4: 2511,
-    5: 1772,
-    6: 2070,
-    7: 2012,
-    8: 2268,
-    9: 1976,
-    10: 1539,
-    11: 1466,
-    12: 1997,
-    13: 1841,
-    14: 1758,
-    15: 5284,
-    16: 2100,
-    17: 3594,
-    18: 1667,
-    19: 3086,
-    20: 2387,
-    21: 2739,
-    22: 2917,
-    23: 2542,
-    24: 4655,
-    25: 1909,
-    26: 1622,
-    27: 6466,
-    28: 1914,
-    29: 3675,
-    30: 9679,
-    31: 4322,
-    32: 7459,
-    33: 8221,
-    34: 4257,
-    35: 3415,
-    36: 4175,
-    37: 2985,
-    38: 3815,
-    39: 6081,
-    40: 2230,
-    41: 2962,
-    42: 5459,
-    43: 6131,
-    44: 4627,
-    45: 6158,
-    46: 5495,
-    47: 3334,
-    48: 4330,
-    49: 5872,
-    50: 2490,
-    51: 5228,
-    52: 2585,
-    53: 2651,
-    54: 2270,
-    55: 10580,
-    56: 3988,
-    57: 2633,
-    58: 9516,
-    59: 3486,
-    60: 5743,
-    61: 6286,
-    62: 6493,
-    63: 6101,
-    64: 9085,
-    65: 2025,
-    66: 3628,
-    67: 2469,
-    68: 2972,
-    69: 8900,
-    70: 6339,
-    71: 7378,
-    72: 3277,
-    73: 11635,
-    74: 14369,
-    75: 2964,
-    76: 2127,
-    77: 2985,
-    78: 2573,
-    79: 3953,
-    80: 5590,
-    81: 5515,
-    82: 1982,
-    83: 5434,
-    84: 3498,
-    85: 6632,
-    86: 2447,
-    87: 2638,
-    88: 4230,
-    89: 3473
-}
-
-RaceGoldTimeText = {
-    0: "0:17:53",
-    1: "0:22:81",
-    2: "0:20:17",
-    3: "0:21:23",
-    4: "0:26:37",
-    5: "0:18:89",
-    6: "0:21:84",
-    7: "0:21:86",
-    8: "0:22:71",
-    9: "0:20:33",
-    10: "0:16:96",
-    11: "0:16:38",
-    12: "0:22:11",
-    13: "0:18:44",
-    14: "0:19:39",
-    15: "1:02:18",
-    16: "0:23:27",
-    17: "0:38:99",
-    18: "0:18:12",
-    19: "0:34:13",
-    20: "0:24:60",
-    21: "0:27:92",
-    22: "0:29:88",
-    23: "0:26:57",
-    24: "0:53:19",
-    25: "0:27:09",
-    26: "0:19:90",
-    27: "1:13:12",
-    28: "0:21:94",
-    29: "0:39:76",
-    30: "1:49:63",
-    31: "0:50:28",
-    32: "1:24:28",
-    33: "1:30:74",
-    34: "0:45:50",
-    35: "0:37:45",
-    36: "0:43:41",
-    37: "0:32:82",
-    38: "0:39:46",
-    39: "1:08:11",
-    40: "0:24:91",
-    41: "0:35:07",
-    42: "1:03:13",
-    43: "1:07:00",
-    44: "0:52:29",
-    45: "1:04:43",
-    46: "1:00:18",
-    47: "0:35:27",
-    48: "0:46:10",
-    49: "0:59:20",
-    50: "0:26:37",
-    51: "0:55:86",
-    52: "0:27:87",
-    53: "0:29:73",
-    54: "0:25:61",
-    55: "1:54:75",
-    56: "0:45:00",
-    57: "0:29:73",
-    58: "1:46:36",
-    59: "0:38:58",
-    60: "1:00:09",
-    61: "1:05:57",
-    62: "1:08:71",
-    63: "1:03:79",
-    64: "1:32:22",
-    65: "0:20:90",
-    66: "0:41:08",
-    67: "0:26:42",
-    68: "0:31:59",
-    69: "1:37:75",
-    70: "1:10:54",
-    71: "1:22:80",
-    72: "0:35:47",
-    73: "2:05:75",
-    74: "2:28:20",
-    75: "0:29:71",
-    76: "0:23:57",
-    77: "0:32:43",
-    78: "0:28:60",
-    79: "0:40:98",
-    80: "0:59:91",
-    81: "0:59:89",
-    82: "0:22:09",
-    83: "0:56:77",
-    84: "0:35:84",
-    85: "1:20:61",
-    86: "0:27:32",
-    87: "0:29:10",
-    88: "0:45:17",
-    89: "0:37:37"
-}
-
-RaceAuthorTimeText = {
-    0: "0:16:17",
-    1: "0:19:01",
-    2: "0:18:76",
-    3: "0:21:20",
-    4: "0:25:11",
-    5: "0:17:72",
-    6: "0:20:70",
-    7: "0:20:12",
-    8: "0:22:68",
-    9: "0:19:76",
-    10: "0:15:39",
-    11: "0:14:66",
-    12: "0:19:97",
-    13: "0:18:41",
-    14: "0:17:58",
-    15: "0:52:84",
-    16: "0:21:00",
-    17: "0:35:94",
-    18: "0:16:67",
-    19: "0:30:86",
-    20: "0:23:87",
-    21: "0:27:39",
-    22: "0:29:17",
-    23: "0:25:42",
-    24: "0:46:55",
-    25: "0:19:09",
-    26: "0:16:22",
-    27: "1:04:66",
-    28: "0:19:14",
-    29: "0:36:75",
-    30: "1:36:79",
-    31: "0:43:22",
-    32: "1:14:59",
-    33: "1:22:21",
-    34: "0:42:57",
-    35: "0:34:15",
-    36: "0:41:75",
-    37: "0:29:85",
-    38: "0:38:15",
-    39: "1:00:81",
-    40: "0:22:30",
-    41: "0:29:62",
-    42: "0:54:59",
-    43: "1:01:31",
-    44: "0:46:27",
-    45: "1:01:58",
-    46: "0:54:95",
-    47: "0:33:34",
-    48: "0:43:30",
-    49: "0:58:72",
-    50: "0:24:90",
-    51: "0:52:28",
-    52: "0:25:85",
-    53: "0:26:51",
-    54: "0:22:70",
-    55: "1:45:80",
-    56: "0:39:88",
-    57: "0:26:33",
-    58: "1:35:16",
-    59: "0:34:86",
-    60: "0:57:43",
-    61: "1:02:86",
-    62: "1:04:93",
-    63: "1:01:01",
-    64: "1:30:85",
-    65: "0:20:25",
-    66: "0:36:28",
-    67: "0:24:69",
-    68: "0:29:72",
-    69: "1:29:00",
-    70: "1:03:39",
-    71: "1:13:78",
-    72: "0:32:77",
-    73: "1:56:35",
-    74: "2:23:69",
-    75: "0:29:64",
-    76: "0:21:27",
-    77: "0:29:85",
-    78: "0:25:73",
-    79: "0:39:53",
-    80: "0:55:90",
-    81: "0:55:15",
-    82: "0:19:82",
-    83: "0:54:34",
-    84: "0:34:98",
-    85: "1:06:32",
-    86: "0:24:47",
-    87: "0:26:38",
-    88: "0:42:30",
-    89: "0:34:73"
-}
-
-PuzzleGoldTimeText = {
-    0: "0:07:00",
-    1: "0:07:00",
-    2: "0:12:00",
-    3: "0:14:50",
-    4: "0:20:00",
-    5: "0:22:00",
-    6: "0:30:00",
-    7: "0:40:00",
-    8: "0:35:00",
-    9: "0:40:00",
-    10: "0:35:00",
-    11: "0:32:00",
-    12: "0:40:00",
-    13: "0:35:00",
-    14: "0:32:00"
-}
-
-PuzzleGoldTime = {
-    0: 0700,
-    1: 0700,
-    2: 1200,
-    3: 1450,
-    4: 2000,
-    5: 2200,
-    6: 3000,
-    7: 4000,
-    8: 3500,
-    9: 4000,
-    10: 3500,
-    11: 3200,
-    12: 4000,
-    13: 3500,
-    14: 3200
-}
-
-function raceTitle(track, enviroment, difficulty) => Enviroments[enviroment] + Difficulty[difficulty] + (track + 1)
+//  Gets platform name from provided params
 function platformTitle(track, difficulty) => "Platform" + Difficulty[difficulty] + (track + 1)
+
+//  Gets puzzle name from provided params
 function puzzleTitle(track, difficulty) => "Puzzle" + Difficulty[difficulty] + (track + 1)
+
+//  Returns true the frame a race ends with the provided params
 function raceEndTrigger(track, env, diff) => isInTrack(track, env, diff) && raceEnd() && !isRacePaused()
+
 
 //Progression achievement functions
 //  For protection measures (backing up another profile with everything unlocked)
@@ -667,41 +896,43 @@ function boughtFunction(item){
 
 //Progression achievements
 //  Race mode
-achievement("Trackmania Rookie", "Unlock Easy Races", 5, trackUnlockTrigger("Race", 10, 5, 0))
-achievement("Trackmania Amateur", "Unlock Medium Races", 5, trackUnlockTrigger("Race", 20, 10, 5))
-achievement("Trackmania Veteran", "Unlock Hard Races", 5, trackUnlockTrigger("Race", 45, 35, 25))
-achievement("Trackmania Expert", "Unlock Extreme Races", 5, trackUnlockTrigger("Race", 60, 50, 45))
-achievement("Trackmania Master", "Unlock Bonus Races", 5, trackUnlockTrigger("Race", 0, 0, 75))
-achievement("Trackmania Legend", "Get all Gold medals in race mode", 50, modeCompletionTrigger("Race", "Gold", 90))
+achievement("Trackmania Rookie", "Unlock Easy Races", 3, trackUnlockTrigger("Race", 10, 5, 0))
+achievement("Trackmania Apprentice", "Unlock Medium Races", 5, trackUnlockTrigger("Race", 20, 10, 5))
+achievement("Trackmania Amateur", "Unlock Hard Races", 5, trackUnlockTrigger("Race", 45, 35, 25))
+achievement("Trackmania Veteran", "Unlock Extreme Races", 10, trackUnlockTrigger("Race", 60, 50, 45))
+achievement("Trackmania Expert", "Unlock Bonus Races", 10, trackUnlockTrigger("Race", 0, 0, 75))
+achievement("Trackmania Legend", "Get all Gold medals in race mode", 25, modeCompletionTrigger("Race", "Gold", 90))
 achievement("Trackmania God", "Get all Author medals in race mode", 100, modeCompletionTrigger("Race", "Author", 90))
 
 //  Platform mode
-achievement("Trackmania Plat 1", "Unlock Easy Platforms", 5, trackUnlockTrigger("Platform", 2, 0, 0))
-achievement("Trackmania Plat 2", "Unlock Medium Platforms", 5, trackUnlockTrigger("Platform", 4, 3, 1))
-achievement("Trackmania Plat 3", "Unlock Hard Platforms", 5, trackUnlockTrigger("Platform", 9, 6, 3))
-achievement("Trackmania Plat 4", "Unlock Extreme Platforms", 5, trackUnlockTrigger("Platform", 12, 10, 8))
-achievement("Trackmania Plat all", "Get all Gold medals in Platform mode", 25, modeCompletionTrigger("Platform", "Gold", 15))
+achievement("Rookie Acrobat", "Unlock Easy Platforms", 5, trackUnlockTrigger("Platform", 2, 0, 0))
+achievement("Amateur Acrobat", "Unlock Medium Platforms", 5, trackUnlockTrigger("Platform", 4, 3, 1))
+achievement("Veteran Acrobat", "Unlock Hard Platforms", 5, trackUnlockTrigger("Platform", 9, 6, 3))
+achievement("Expert Acrobat", "Unlock Extreme Platforms", 10, trackUnlockTrigger("Platform", 12, 10, 8))
+achievement("Legendary Acrobat", "Get all Gold medals in Platform mode", 25, modeCompletionTrigger("Platform", "Gold", 15))
 
 //  Puzzle mode
-achievement("Trackmania Puz 1", "Unlock Easy Puzzles", 5, trackUnlockTrigger("Puzzle", 3, 0, 0))
-achievement("Trackmania Puz 2", "Unlock Medium Puzzles", 5, trackUnlockTrigger("Puzzle", 6, 3, 0))
-achievement("Trackmania Puz 3", "Unlock Hard Puzzles", 5, trackUnlockTrigger("Puzzle", 9, 6, 3))
-achievement("Trackmania Puz 4", "Unlock Extreme Puzzles", 5, trackUnlockTrigger("Puzzle", 12, 9, 6))
-achievement("Trackmania Puz All", "Get all Gold medals in Puzzle mode", 25, modeCompletionTrigger("Puzzle", "Gold", 15))
+achievement("Rookie Architect", "Unlock Easy Puzzles", 2, trackUnlockTrigger("Puzzle", 3, 0, 0))
+achievement("Amateur Architect", "Unlock Medium Puzzles", 3, trackUnlockTrigger("Puzzle", 6, 3, 0))
+achievement("Veteran Architect", "Unlock Hard Puzzles", 5, trackUnlockTrigger("Puzzle", 9, 6, 3))
+achievement("Expert Architect", "Unlock Extreme Puzzles", 5, trackUnlockTrigger("Puzzle", 12, 9, 6))
+achievement("Legendary Architect", "Get all Gold medals in Puzzle mode", 10, modeCompletionTrigger("Puzzle", "Gold", 15))
 
 //  Shop
-achievement("Skins", "Buy all skins in the shop", 5, boughtFunction("Skins"))
-achievement("Blocks", "Buy all blocks in the shop", 5, boughtFunction("Blocks"))
-achievement("Tracks", "Buy all tracks in the shop", 5, boughtFunction("Tracks"))
+achievement("Car Painter", "Buy all skins in the shop", 5, boughtFunction("Skins"))
+achievement("Professional Builder", "Buy all blocks in the shop", 5, boughtFunction("Blocks"))
+achievement("Even More Races!", "Buy all tracks in the shop", 5, boughtFunction("Tracks"))
 
 
 //Race achievement functions
-function raceTitleGold(track, env, diff) => raceTitle(track, env, diff) + " Gold"
-function raceTitleAuthor(track, env, diff) => raceTitle(track, env, diff) + " Author"
-function raceDescriptionGold(track, env, diff) => "Finish " + raceTitle(track, env, diff) + " in less than " + RaceGoldTimeText[raceIndex(track, env, diff)]
-function raceDescriptionAuthor(track, env, diff) => "Finish " + raceTitle(track, env, diff) + " in less than " + RaceAuthorTimeText[raceIndex(track, env, diff)]
-function raceTimeLowerThanGold(track, env, diff) => getTimer() < time2RawData(RaceGoldTime[raceIndex(track, env, diff)])
-function raceTimeLowerThanAuthor(track, env, diff) => getTimer() < time2RawData(RaceAuthorTime[raceIndex(track, env, diff)])
+function raceTitleGold(track, env, diff) => raceTitle(track, env, diff) + " Master"
+function raceTitleAuthor(track, env, diff) => raceTitle(track, env, diff) + " Grandmaster"
+function raceDescriptionGold(track, env, diff) => "Finish " + raceTitle(track, env, diff) + " in less than " + Race["GoldTimeString"][raceIndex(track, env, diff)]
+function raceDescriptionAuthor(track, env, diff) => "Finish " + raceTitle(track, env, diff) + " in less than " + Race["AuthorTimeString"][raceIndex(track, env, diff)]
+function racePointsGold(track, env, diff) => Race["GoldPoints"][raceIndex(track, env, diff)]
+function racePointsAuthor(track, env, diff) => Race["AuthorPoints"][raceIndex(track, env, diff)]
+function raceTimeLowerThanGold(track, env, diff) => getTimer() < time2RawData(Race["GoldTime"][raceIndex(track, env, diff)])
+function raceTimeLowerThanAuthor(track, env, diff) => getTimer() < time2RawData(Race["AuthorTime"][raceIndex(track, env, diff)])
 function raceGoldMedalTrigger(track, env, diff) => isOnRaceMode() && raceEndTrigger(track, env, diff) && raceTimeLowerThanGold(track, env, diff)
 function raceAuthorMedalTrigger(track, env, diff) => isOnRaceMode() && raceEndTrigger(track, env, diff) && raceTimeLowerThanAuthor(track, env, diff)
 
@@ -710,38 +941,41 @@ for d in range(0,5){
     for e in range(0,2){
         for t in range(0,4){
             //Gold medals
-            achievement(raceTitleGold(t, e, d), raceDescriptionGold(t, e, d), 5, raceGoldMedalTrigger(t, e, d))
+            achievement(raceTitleGold(t, e, d), raceDescriptionGold(t, e, d), racePointsGold(t, e, d), raceGoldMedalTrigger(t, e, d))
             
             //Author medal
-            achievement(raceTitleAuthor(t, e, d), raceDescriptionAuthor(t, e, d), 5, raceAuthorMedalTrigger(t, e, d))
+            achievement(raceTitleAuthor(t, e, d), raceDescriptionAuthor(t, e, d), racePointsAuthor(t, e, d), raceAuthorMedalTrigger(t, e, d))
         }
     }
 }
 
 
 //Platform achievement functions
-function platformTitleGold(track, diff) => platformTitle(track, diff) + " Gold"
+function platformTitleGold(track, diff) => platformTitle(track, diff) + " Master"
 function platformDescriptionGold(track, diff) => "Finish " + platformTitle(track, diff) + " with 0 retries"
+function platformPointsGold(track, diff) => Platform["GoldPoints"][puzzleIndex(track, diff)]
 function platformZeroRetries() => 0 == getRetries()
 function platformGoldMedalTrigger(track, diff) => isOnPlatformMode() && raceEndTrigger(track, track, diff) && platformZeroRetries()
 
 //Platform achievements
 for d in range(0,4){
     for t in range(0,2){
-        achievement(platformTitleGold(t, d), platformDescriptionGold(t, d), 5, platformGoldMedalTrigger(t, d))
+        achievement(platformTitleGold(t, d), platformDescriptionGold(t, d), platformPointsGold(t, d), platformGoldMedalTrigger(t, d))
     }
 }
 
+
 //Puzzle achievement functions
-function puzzleTitleGold(track, diff) => puzzleTitle(track, diff) + " Gold"
-function puzzleDescriptionGold(track, diff) => "Finish " + puzzleTitle(track, diff) + " in less than " + PuzzleGoldTimeText[puzzleIndex(track, diff)]
-function puzzleTimeLowerThanGold(track, diff) => getTimer() < time2RawData(PuzzleGoldTime[puzzleIndex(track, diff)])
+function puzzleTitleGold(track, diff) => puzzleTitle(track, diff) + " Master"
+function puzzleDescriptionGold(track, diff) => "Finish " + puzzleTitle(track, diff) + " in less than " + Puzzle["GoldTimeString"][puzzleIndex(track, diff)]
+function puzzlePointsGold(track, diff) => Puzzle["GoldPoints"][puzzleIndex(track, diff)]
+function puzzleTimeLowerThanGold(track, diff) => getTimer() < time2RawData(Puzzle["GoldTime"][puzzleIndex(track, diff)])
 function puzzleGoldMedalTrigger(track, diff) => isOnPuzzleMode() && raceEndTrigger(track, track, diff) && puzzleTimeLowerThanGold(track, diff)
 
 //Puzzle achievement functions
 for d in range(0,4){
     for t in range(0,2){
-        achievement(puzzleTitleGold(t, d), puzzleDescriptionGold(t, d), 5, puzzleGoldMedalTrigger(t, d))
+        achievement(puzzleTitleGold(t, d), puzzleDescriptionGold(t, d), puzzlePointsGold(t, d), puzzleGoldMedalTrigger(t, d))
     }
 }
 
@@ -753,7 +987,7 @@ function timerLB() => measured(rawData2Time(getTimer()))
 
 
 //Race Leaderboard Functions
-function raceTitleLB(track, enviroment, difficulty) => Enviroments[enviroment] + Difficulty[difficulty] + (track + 1)
+function raceTitleLB(track, enviroment, difficulty) => Environments[enviroment] + Difficulty[difficulty] + (track + 1)
 function raceDescriptionLB(track, enviroment, difficulty) => "Beat " + raceTitleLB(track, enviroment, difficulty) + " in least time"
 function raceStartLB(track, enviroment, difficulty) => isOnRaceMode() && raceStart() && isInTrack(track, enviroment, difficulty)
 
@@ -803,6 +1037,58 @@ for d in range(0,4){
         leaderboard(puzzleTitleLB(t, d), puzzleDescriptionLB(t, d), puzzleStartLB(t, d), cancelLB(), submitLB(), timerLB(), format="MILLISECS", lower_is_better=true)
     }
 }
+
+
+//Rich pressence functions
+function totalMedalsRP(type, file){
+    total = 0
+    for gamemode in Medals{
+        total = total + dword(Medals[gamemode][type][file])
+    }
+    
+    return total
+}
+
+function authorMedalsRP(file) => dword(Medals["Race"]["Author"][file])
+function getTrack() => dword(0x227BC4)
+function getEnvironment() => dword(0x227BB8)
+function getDifficulty() => dword(0x227BC0)
+
+//Rich pressence script
+for file in range(0,2){
+    rich_presence_conditional_display(inMenu() && getFileIndex() == file, "In the Title Screen | 🥉{0} | 🥈{1} | 🥇{2} | 🎖️{3}",
+        rich_presence_value("Number", totalMedalsRP("Bronze",file)),
+        rich_presence_value("Number", totalMedalsRP("Silver",file)),
+        rich_presence_value("Number", totalMedalsRP("Gold",file)),
+        rich_presence_value("Number", authorMedalsRP(file)))
+    
+    rich_presence_conditional_display(isOnRaceMode() && getFileIndex() == file, "Racing in {4}{5}{6} | 🥉{0} | 🥈{1} | 🥇{2} | 🎖️{3}",
+        rich_presence_value("Number", totalMedalsRP("Bronze",file)),
+        rich_presence_value("Number", totalMedalsRP("Silver",file)),
+        rich_presence_value("Number", totalMedalsRP("Gold",file)),
+        rich_presence_value("Number", authorMedalsRP(file)),
+        rich_presence_lookup("Environments", getEnvironment(), Environments),
+        rich_presence_lookup("Difficulty", getDifficulty(), Difficulty),
+        rich_presence_value("Number", getTrack() + 1))
+        
+    rich_presence_conditional_display(isOnPlatformMode() && getFileIndex() == file, "Racing in Platform{4}{5} | 🥉{0} | 🥈{1} | 🥇{2} | 🎖️{3}",
+        rich_presence_value("Number", totalMedalsRP("Bronze",file)),
+        rich_presence_value("Number", totalMedalsRP("Silver",file)),
+        rich_presence_value("Number", totalMedalsRP("Gold",file)),
+        rich_presence_value("Number", authorMedalsRP(file)),
+        rich_presence_lookup("Difficulty", getDifficulty(), Difficulty),
+        rich_presence_value("Number", getTrack() + 1))
+    
+    rich_presence_conditional_display(isOnPuzzleMode() && getFileIndex() == file, "Racing in Puzzle{4}{5} | 🥉{0} | 🥈{1} | 🥇{2} | 🎖️{3}",
+        rich_presence_value("Number", totalMedalsRP("Bronze",file)),
+        rich_presence_value("Number", totalMedalsRP("Silver",file)),
+        rich_presence_value("Number", totalMedalsRP("Gold",file)),
+        rich_presence_value("Number", authorMedalsRP(file)),
+        rich_presence_lookup("Difficulty", getDifficulty(), Difficulty),
+        rich_presence_value("Number", getTrack() + 1))
+}
+
+rich_presence_display("Playing Trackmania DS")
 
 
 
